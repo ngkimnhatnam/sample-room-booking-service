@@ -1,0 +1,41 @@
+{
+  "name": "sample-room-booking-service",
+  "version": "1.0.0",
+  "description": "A Node backend sample for room booking service",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngkimnhatnam/sample-room-booking-service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ngkimnhatnam/sample-room-booking-service/issues"
+  },
+  "homepage": "https://github.com/ngkimnhatnam/sample-room-booking-service#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.4"
+  }
+}
