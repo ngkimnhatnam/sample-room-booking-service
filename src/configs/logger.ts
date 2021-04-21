@@ -1,5 +1,6 @@
-export const Logger = (level: string, subject: string, message: string) => {
+export default function Logger(info: { level: string, subject: string, message: string }) {
 
+  const { level, subject, message } = info
   /* Reformat timestamp for logging events to YYYY-MM-DD HH:MM:SS */
   const logTimestamp = new Date().toISOString().slice(0, 19).split('T').join(' ')
 
