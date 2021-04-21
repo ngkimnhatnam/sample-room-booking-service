@@ -30,6 +30,8 @@
   },
   "homepage": "https://github.com/ngkimnhatnam/sample-room-booking-service#readme",
   "devDependencies": {
+    "@types/mysql": "^2.15.18",
+    "@types/node": "^14.14.41",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.24.0",
@@ -39,6 +41,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
   }
 }
