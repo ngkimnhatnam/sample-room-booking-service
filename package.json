@@ -4,7 +4,9 @@
   "description": "A Node backend sample for room booking service",
   "main": "index.js",
   "scripts": {
-    "tsc": "tsc",
+    "build": "tsc -p ./",
+    "prestart": "npm run build",
+    "start": "node ./dist/server.js",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +32,7 @@
   },
   "homepage": "https://github.com/ngkimnhatnam/sample-room-booking-service#readme",
   "devDependencies": {
+    "@types/express": "^4.17.11",
     "@types/mysql": "^2.15.18",
     "@types/node": "^14.14.41",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
