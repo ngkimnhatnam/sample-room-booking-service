@@ -7,6 +7,7 @@
     "build": "tsc -p ./",
     "prestart": "npm run build",
     "start": "node ./dist/server.js",
+    "dev": "nodemon --config nodemon.json src/server.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -40,7 +41,9 @@
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
   "dependencies": {
