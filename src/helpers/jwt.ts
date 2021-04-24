@@ -1,18 +1,14 @@
 // Dependencies import
-import * as jwt from 'jsonwebtoken'
+import * as jwt from 'jsonwebtoken';
 
 // Config import
-import securityConfig from '../configs/security'
+import securityConfig from '../configs/security';
 
 export const signNewJWT = (user_id: number): string => {
-  const { jwt_token_secret, jwt_options } = securityConfig
+  const { jwt_token_secret, jwt_options } = securityConfig;
   const payload = {
-    user_id
-  }
+    user_id,
+  };
 
-  return jwt.sign(
-    payload,
-    jwt_token_secret,
-    jwt_options
-  )
-}
+  return jwt.sign(payload, jwt_token_secret, jwt_options);
+};

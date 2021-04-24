@@ -8,18 +8,19 @@
     "prestart": "npm run build",
     "start": "node ./dist/server.js",
     "predev": "npm run build",
-    "dev": "nodemon --config nodemon.json src/server.ts -r dotenv/config ./dist/server.js dotenv_config_path=./dist/.env",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "dev": "nodemon --config nodemon.json src/server.ts",
+    "lint": "npx eslint src --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged"
     }
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "eslint --fix"
+      "npx eslint src --fix"
     ]
   },
   "repository": {
@@ -38,6 +39,8 @@
     "@types/jsonwebtoken": "^8.5.1",
     "@types/mysql": "^2.15.18",
     "@types/node": "^14.14.41",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@types/swagger-ui-express": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "dotenv": "^8.2.0",
@@ -52,6 +55,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "swagger-jsdoc": "^6.0.9",
+    "swagger-ui-express": "^4.1.6"
   }
 }
