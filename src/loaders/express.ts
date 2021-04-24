@@ -9,6 +9,7 @@ import swaggerDefinition from '../configs/swagger';
 
 // Routes import
 import userRoutes from '../routes/user';
+import authRoutes from '../routes/authentication';
 
 const ExpressLoaders = ({ app }: { app: Application }): Application => {
   app.use(express.urlencoded({ extended: true }));
@@ -30,6 +31,7 @@ const ExpressLoaders = ({ app }: { app: Application }): Application => {
   app.use(express.json({ limit: '10kb' }));
 
   app.use('/api/v1', userRoutes);
+  app.use('/api/v1', authRoutes);
 
   return app;
 };
