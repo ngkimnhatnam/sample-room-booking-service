@@ -1,4 +1,7 @@
+// Dependencies import
 import { Request, Response } from 'express';
+
+// Services import
 import * as authService from '../services/authentication';
 
 export const login = async (req: Request, res: Response): Promise<void> => {
