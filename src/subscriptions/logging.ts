@@ -33,3 +33,23 @@ event.on('signup-success', (email) => {
   };
   logger(info);
 });
+
+/* Login success */
+event.on('login-success', (user_id, email) => {
+  const info = {
+    level: 'info',
+    subject: 'User logged in',
+    message: `User: ${user_id} | Email: ${email}`,
+  };
+  logger(info);
+});
+
+/* Login error */
+event.on('login-failure', (err, email) => {
+  const info = {
+    level: 'error',
+    subject: 'Error during login process',
+    message: `Error: ${JSON.stringify(err)} | Email: ${email}`,
+  };
+  logger(info);
+});

@@ -22,6 +22,8 @@ export const handleLogin = async (email: string, password: string) => {
     }
 
     const access_token = jwt.signNewJWT(user_id);
+
+    eventBus.emit('login-success', user_id, email);
     return {
       message: 'User logged in successfully',
       status: 200,
@@ -29,7 +31,7 @@ export const handleLogin = async (email: string, password: string) => {
       access_token,
     };
   } catch (err) {
-    eventBus.emit('login-failure', email);
+    eventBus.emit('login-failure', err, email);
     if (err.status) {
       throw { message: err.message, status: err.status };
     }
