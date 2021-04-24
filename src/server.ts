@@ -8,7 +8,7 @@ const startServer = async () => {
 
   const app = await loaders({ expressApp: application });
 
-  app.listen(port)
+  app.listen(port);
 };
 
 startServer();

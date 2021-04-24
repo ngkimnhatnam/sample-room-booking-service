@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 const securityConfig = {
   jwt_token_secret: process.env.JWT_TOKEN_SECRET!,
@@ -14,6 +14,6 @@ const securityConfig = {
   iterations: Number(process.env.MY_HASH_ITERATIONS),
   hash_length: Number(process.env.MY_HASH_LENGTH),
   hash_digest: process.env.MY_HASH_DIGEST!,
-}
+};
 
-export default securityConfig
+export default securityConfig;
