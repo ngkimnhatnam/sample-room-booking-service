@@ -1,5 +1,9 @@
+// Dependencies import
 import express from 'express';
 import { Request, Response, NextFunction, Application } from 'express';
+
+// Routes import
+import userRoutes from '../routes/user'
 
 const ExpressLoaders = ({ app }: { app: Application }): Application => {
 
@@ -16,6 +20,9 @@ const ExpressLoaders = ({ app }: { app: Application }): Application => {
   });
 
   app.use(express.json({ limit: '10kb' }));
+
+  app.use('/api/v1', userRoutes)
+
   return app;
 };
 
