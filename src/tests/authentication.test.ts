@@ -1,3 +1,12 @@
+// Dependencies import
+import request from 'supertest';
+import express from 'express';
+
+// Initiate Express app
+import loaders from '../loaders/index';
+const application = express();
+
+// Helper import
 import * as authenticationHelper from '../helpers/authentication';
 
 describe('Testing Auth Helper functions: Create Hash Password', () => {
@@ -28,5 +37,42 @@ describe('Testing Auth Helper functions: Validate passwords', () => {
     expect(validationResult).toBeDefined();
     expect(validationResult).not.toBeNull();
     expect(validationResult).toBeFalsy();
+  });
+});
+
+describe('Testing login route endpoint', () => {
+  it('Should return a response', async (done) => {
+    const app = await loaders({ expressApp: application });
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'step@stepout.fi',
+        password: 'ouchouch',
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(res.status).toEqual(401);
+    expect(res.body.message).toBeDefined();
+    expect(res.body.message).not.toBeNull();
+    expect(res.body.message).toEqual('Email or password incorrect');
+    done();
+  });
+
+  it('Should return a response with success message and JWT', async (done) => {
+    const app = await loaders({ expressApp: application });
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'nam@stepout.fi',
+        password: 'Nhatnam92',
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toBeDefined();
+    expect(res.body.message).not.toBeNull();
+    expect(res.body.message).toEqual('User logged in successfully');
+    expect(res.body.access_token).toBeDefined();
+    done();
   });
 });
