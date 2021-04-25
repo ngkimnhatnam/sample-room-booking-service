@@ -46,8 +46,8 @@ describe('Testing login route endpoint', () => {
     const res = await request(app)
       .post('/api/v1/login')
       .send({
-        email: 'step@stepout.fi',
-        password: 'ouchouch',
+        email: 'wrong@mail.com',
+        password: 'whateverpassword',
       })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/);
@@ -63,8 +63,8 @@ describe('Testing login route endpoint', () => {
     const res = await request(app)
       .post('/api/v1/login')
       .send({
-        email: 'nam@stepout.fi',
-        password: 'Nhatnam92',
+        email: 'random@mail.com',
+        password: 'randomPass',
       })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/);
