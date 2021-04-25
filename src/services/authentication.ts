@@ -31,6 +31,7 @@ export const handleLogin = async (email: string, password: string) => {
       access_token,
     };
   } catch (err) {
+    console.log('Err', err);
     eventBus.emit('login-failure', err, email);
     if (err.status) {
       throw { message: err.message, status: err.status };

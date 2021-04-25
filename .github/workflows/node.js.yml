@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
@@ -26,6 +25,11 @@ jobs:
       - name: Testing phase
         run: npm test
         env:
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MY_HASH_SALT: ${{ secrets.MY_HASH_SALT }}
           MY_HASH_ITERATIONS: ${{ secrets.MY_HASH_ITERATIONS }}
           MY_HASH_LENGTH: ${{ secrets.MY_HASH_LENGTH }}
