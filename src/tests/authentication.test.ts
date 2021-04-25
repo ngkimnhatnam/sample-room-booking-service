@@ -51,6 +51,7 @@ describe('Testing login route endpoint', () => {
       })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/);
+    console.log('Res', res.body);
     expect(res.status).toEqual(401);
     expect(res.body.message).toBeDefined();
     expect(res.body.message).not.toBeNull();
@@ -68,6 +69,7 @@ describe('Testing login route endpoint', () => {
       })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/);
+    console.log('Res', res.body);
     expect(res.status).toEqual(200);
     expect(res.body.message).toBeDefined();
     expect(res.body.message).not.toBeNull();
