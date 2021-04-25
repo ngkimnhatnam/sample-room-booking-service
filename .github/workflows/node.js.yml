@@ -25,6 +25,11 @@ jobs:
       - run: npm run build --if-present
       - name: Testing phase
         run: npm test
+        env:
+          MY_HASH_SALT: ${{ secrets.MY_HASH_SALT }}
+          MY_HASH_ITERATIONS: ${{ secrets.MY_HASH_ITERATIONS }}
+          MY_HASH_LENGTH: ${{ secrets.MY_HASH_LENGTH }}
+          MY_HASH_DIGEST: ${{ secrets.MY_HASH_DIGEST }}
       - name: Build and push Docker images
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
