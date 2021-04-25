@@ -7,6 +7,7 @@ export const getAllRooms = async () => {
     return {
       message: 'Rooms data retrieved successfully',
       status: 200,
+      total_records: rooms.length,
       data: rooms,
     };
   } catch (err) {
