@@ -54,6 +54,9 @@ export const handleBooking = async (
     if (user_booking_start.diff(room_local_time, 'minutes').minutes < 0) {
       throw { message: 'Booking must not be in the past', status: 400 };
     }
+    if (!isBookingWithinOpeningHours(user_booking_start, user_booking_end, opening_hour, closing_hour)) {
+      throw { message: 'Booking must be within opening hours', status: 400 };
+    }
 
     console.log(user_id, opening_hour, closing_hour);
     return {
@@ -66,4 +69,23 @@ export const handleBooking = async (
     }
     throw { message: 'Something went wrong', status: 500 };
   }
+};
+
+const isBookingWithinOpeningHours = (
+  booking_start: DateTimeConversion.DateTime,
+  booking_end: DateTimeConversion.DateTime,
+  opening_hour: string,
+  closing_hour: string,
+): boolean => {
+  const [open_in_hour, open_in_minute] = opening_hour.split(':').map((value) => Number(value));
+  const [closing_in_hour, closing_in_minute] = closing_hour.split(':').map((value) => Number(value));
+  if (
+    booking_start.hour < open_in_hour ||
+    (booking_start.hour === open_in_hour && booking_start.minute < open_in_minute) ||
+    booking_end.hour > closing_in_hour ||
+    (booking_end.hour === closing_in_hour && booking_end.minute > closing_in_minute)
+  ) {
+    return false;
+  }
+  return true;
 };
