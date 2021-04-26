@@ -72,4 +72,6 @@ const router = express.Router();
  */
 router.get('/rooms', roomController.getRooms);
 
+router.get('/rooms/:room_id', roomController.getRoom);
+
 export default router;
