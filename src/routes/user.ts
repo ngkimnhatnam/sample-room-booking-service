@@ -68,4 +68,6 @@ const router = express.Router();
  */
 router.post('/users', userController.signup);
 
+router.post('/users/:user_id/bookings', userController.bookRoom);
+
 export default router;
