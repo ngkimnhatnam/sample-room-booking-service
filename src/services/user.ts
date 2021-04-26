@@ -80,14 +80,42 @@ export const handleBooking = async (
   }
 };
 
+/**
+ * Function checking if potential booking duration is too short
+ * @param booking_start - Luxon Datetime object.
+ * Represent user's wanted booking starting time
+ * @param booking_end - Luxon Datetime object.
+ * Represent user's wanted booking ending time
+ * @returns boolean
+ */
 const isBookingDurationTooShort = (booking_start: DateTime, booking_end: DateTime): boolean => {
   return booking_end.diff(booking_start, 'minutes').minutes < 15 ? true : false;
 };
 
+/**
+ * Function checking if potential booking is in the past
+ * @param booking_start - Luxon Datetime object.
+ * Represent user's wanted booking starting time
+ * @param room_local_time - Luxon Datetime object.
+ * Represent current local time at room's location/timezone
+ * @returns boolean
+ */
 const isBookingInThePast = (booking_start: DateTime, room_local_time: DateTime): boolean => {
   return booking_start.diff(room_local_time, 'minutes').minutes < 0 ? true : false;
 };
 
+/**
+ * Function checking if potential booking is outside room's opening hours
+ * @param booking_start - Luxon Datetime object.
+ * Represent user's wanted booking starting time
+ * @param booking_end - Luxon Datetime object.
+ * Represent user's wanted booking ending time
+ * @param opening_hour - Room daily opening hour.
+ * Represented by string e.g. 08:00:00
+ * @param closing_hour - Room daily closing hour.
+ * Represented by string e.g. 17:00:00
+ * @returns boolean
+ */
 const isBookingOutsideOpeningHours = (
   booking_start: DateTime,
   booking_end: DateTime,
@@ -95,6 +123,8 @@ const isBookingOutsideOpeningHours = (
   closing_hour: string,
 ): boolean => {
   const { year, month, day, zoneName } = booking_start;
+  /* Room's opening & ending time converted to arrays of integers 
+  representing hours (0-24), minutes (0-60) */
   const [open_in_hour, open_in_minute] = opening_hour.split(':').map((value) => Number(value));
   const [closing_in_hour, closing_in_minute] = closing_hour.split(':').map((value) => Number(value));
 
@@ -121,11 +151,23 @@ const isBookingOutsideOpeningHours = (
     : false;
 };
 
+/**
+ * Function checking if potential booking is overlapped by existing ones
+ * @param current_bookings - Array of current bookings for a room.
+ * Containing start & end timestamp
+ * @param booking_start - Luxon Datetime object.
+ * Represent user's wanted booking starting time
+ * @param booking_end - Luxon Datetime object.
+ * Represent user's wanted booking ending time
+ * @returns boolean
+ */
 const isBookingOverlapped = (
   current_bookings: roomModel.RoomBookings[],
   booking_start: DateTime,
   booking_end: DateTime,
 ): boolean => {
+  /* All bookings happening before & after potential booking's time is trimmed. 
+  Any items remaining in the new filtered array indicates overlapping */
   return current_bookings.filter(
     (booking) => !(booking.end_time < booking_start.toSeconds()) && !(booking.start_time > booking_end.toSeconds()),
   ).length > 0
