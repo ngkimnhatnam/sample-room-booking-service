@@ -14,12 +14,12 @@ export const getRooms = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getRoom = async (req: Request, res: Response) => {
+export const getRoom = async (req: Request, res: Response): Promise<void> => {
   const room_id = Number(req.params.room_id);
   try {
     const result = await roomService.getOneRoom(room_id);
-    return res.status(result.status).json({ ...result });
+    res.status(result.status).json({ ...result });
   } catch (err) {
-    return res.status(err.status).json({ message: err.message });
+    res.status(err.status).json({ message: err.message });
   }
 };
