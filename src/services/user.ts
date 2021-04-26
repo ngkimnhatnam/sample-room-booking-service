@@ -51,7 +51,7 @@ export const handleBooking = async (
     if (!isBookingDurationLongEnough(user_booking_start, user_booking_end)) {
       throw { message: 'Booking must last at least 15 minutes', status: 400 };
     }
-    if (user_booking_start.diff(room_local_time, 'minutes').minutes < 0) {
+    if (isBookingInThePast(user_booking_start, room_local_time)) {
       throw { message: 'Booking must not be in the past', status: 400 };
     }
     if (!isBookingWithinOpeningHours(user_booking_start, user_booking_end, opening_hour, closing_hour)) {
@@ -79,6 +79,13 @@ const isBookingDurationLongEnough = (booking_start: DateTime, booking_end: DateT
     return false;
   }
   return true;
+};
+
+const isBookingInThePast = (booking_start: DateTime, room_local_time: DateTime): boolean => {
+  if (booking_start.diff(room_local_time, 'minutes').minutes < 0) {
+    return true;
+  }
+  return false;
 };
 
 const isBookingWithinOpeningHours = (
