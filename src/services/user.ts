@@ -46,9 +46,13 @@ export const handleBooking = async (
     const { timezone, opening_hour, closing_hour } = room_details;
     const user_booking_start = DateTimeConversion.DateTime.fromISO(booking_start, { zone: timezone });
     const user_booking_end = DateTimeConversion.DateTime.fromISO(booking_end, { zone: timezone });
+    const room_local_time = DateTimeConversion.DateTime.now().setZone(timezone);
 
     if (user_booking_end.diff(user_booking_start, 'minutes').minutes < 15) {
       throw { message: 'Booking must last at least 15 minutes', status: 400 };
+    }
+    if (user_booking_start.diff(room_local_time, 'minutes').minutes < 0) {
+      throw { message: 'Booking must not be in the past', status: 400 };
     }
 
     console.log(user_id, opening_hour, closing_hour);
