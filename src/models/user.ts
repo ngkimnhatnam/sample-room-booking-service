@@ -34,3 +34,18 @@ export const checkUserEmailExistence = (email: string): Promise<string[]> => {
     });
   });
 };
+
+export const createNewBooking = (user_id: number) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `SELECT email FROM users 
+      WHERE email = ?`;
+    const queryValues = [user_id];
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
+};
