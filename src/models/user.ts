@@ -35,17 +35,22 @@ export const checkUserEmailExistence = (email: string): Promise<string[]> => {
   });
 };
 
-export const createNewBooking = (user_id: number) => {
+export const createNewBooking = (
+  user_id: number,
+  room_id: number,
+  start_time: number,
+  end_time: number,
+): Promise<number> => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `SELECT email FROM users 
-      WHERE email = ?`;
-    const queryValues = [user_id];
+    const sqlQuery = `INSERT INTO bookings (user_id, room_id, start_time, end_time, created_at) 
+      VALUES (?,?,?,?,now())`;
+    const queryValues = [user_id, room_id, start_time, end_time];
     SQL.query(sqlQuery, queryValues, (err, res) => {
       if (err) {
         eventBus.emit('database-error', err);
         reject(err);
       }
-      resolve(res);
+      resolve(res.insertId);
     });
   });
 };

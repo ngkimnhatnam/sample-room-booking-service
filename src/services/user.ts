@@ -61,10 +61,16 @@ export const handleBooking = async (
       throw { message: 'Booking has overlapping reservations', status: 400 };
     }
 
-    return {
-      messsage: 'Got here',
+    const booking_id = await userModel.createNewBooking(
       user_id,
+      room_id,
+      user_booking_start.toSeconds(),
+      user_booking_end.toSeconds(),
+    );
+    return {
+      messsage: 'Booking created successfully',
       status: 201,
+      booking_id,
     };
   } catch (err) {
     if (err.status) {
@@ -88,12 +94,29 @@ const isBookingOutsideOpeningHours = (
   opening_hour: string,
   closing_hour: string,
 ): boolean => {
+  const { year, month, day, zoneName } = booking_start;
   const [open_in_hour, open_in_minute] = opening_hour.split(':').map((value) => Number(value));
   const [closing_in_hour, closing_in_minute] = closing_hour.split(':').map((value) => Number(value));
-  return booking_start.hour < open_in_hour ||
-    (booking_start.hour === open_in_hour && booking_start.minute < open_in_minute) ||
-    booking_end.hour > closing_in_hour ||
-    (booking_end.hour === closing_in_hour && booking_end.minute > closing_in_minute)
+
+  const room_open_unix_stamp = DateTime.fromObject({
+    year,
+    month,
+    day,
+    hour: open_in_hour,
+    minute: open_in_minute,
+    zone: zoneName,
+  }).toSeconds();
+
+  const room_close_unix_stamp = DateTime.fromObject({
+    year,
+    month,
+    day,
+    hour: closing_in_hour,
+    minute: closing_in_minute,
+    zone: zoneName,
+  }).toSeconds();
+
+  return booking_start.toSeconds() < room_open_unix_stamp || booking_end.toSeconds() > room_close_unix_stamp
     ? true
     : false;
 };
@@ -103,10 +126,9 @@ const isBookingOverlapped = (
   booking_start: DateTime,
   booking_end: DateTime,
 ): boolean => {
-  const overlapping_bookings = current_bookings.filter((booking) => {
-    if (!(booking.end_time < booking_start.toSeconds()) && !(booking.start_time > booking_end.toSeconds())) {
-      return booking;
-    }
-  });
-  return overlapping_bookings.length > 0 ? true : false;
+  return current_bookings.filter(
+    (booking) => !(booking.end_time < booking_start.toSeconds()) && !(booking.start_time > booking_end.toSeconds()),
+  ).length > 0
+    ? true
+    : false;
 };
