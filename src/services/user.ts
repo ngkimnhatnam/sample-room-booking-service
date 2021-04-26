@@ -1,5 +1,5 @@
 // Dependencies import
-import * as DateTimeConversion from 'luxon';
+import { DateTime } from 'luxon';
 
 // Helpers import
 import * as authenticationHelper from '../helpers/authentication';
@@ -42,11 +42,11 @@ export const handleBooking = async (
 ) => {
   const { room_id, booking_start, booking_end } = user_payload;
   try {
-    const room_details = await roomModel.findOne(room_id);
-    const { timezone, opening_hour, closing_hour } = room_details;
-    const user_booking_start = DateTimeConversion.DateTime.fromISO(booking_start, { zone: timezone });
-    const user_booking_end = DateTimeConversion.DateTime.fromISO(booking_end, { zone: timezone });
-    const room_local_time = DateTimeConversion.DateTime.now().setZone(timezone);
+    const { timezone, opening_hour, closing_hour, bookings_timestamps } = await roomModel.findOne(room_id);
+
+    const user_booking_start = DateTime.fromISO(booking_start, { zone: timezone });
+    const user_booking_end = DateTime.fromISO(booking_end, { zone: timezone });
+    const room_local_time = DateTime.now().setZone(timezone);
 
     if (user_booking_end.diff(user_booking_start, 'minutes').minutes < 15) {
       throw { message: 'Booking must last at least 15 minutes', status: 400 };
@@ -57,10 +57,13 @@ export const handleBooking = async (
     if (!isBookingWithinOpeningHours(user_booking_start, user_booking_end, opening_hour, closing_hour)) {
       throw { message: 'Booking must be within opening hours', status: 400 };
     }
+    if (isBookingOverlapped(bookings_timestamps, user_booking_start, user_booking_end)) {
+      throw { message: 'Booking has overlapping reservations', status: 400 };
+    }
 
-    console.log(user_id, opening_hour, closing_hour);
     return {
       messsage: 'Got here',
+      user_id,
       status: 201,
     };
   } catch (err) {
@@ -72,8 +75,8 @@ export const handleBooking = async (
 };
 
 const isBookingWithinOpeningHours = (
-  booking_start: DateTimeConversion.DateTime,
-  booking_end: DateTimeConversion.DateTime,
+  booking_start: DateTime,
+  booking_end: DateTime,
   opening_hour: string,
   closing_hour: string,
 ): boolean => {
@@ -88,4 +91,17 @@ const isBookingWithinOpeningHours = (
     return false;
   }
   return true;
+};
+
+const isBookingOverlapped = (
+  current_bookings: roomModel.RoomBookings[],
+  booking_start: DateTime,
+  booking_end: DateTime,
+): boolean => {
+  const overlapping_bookings = current_bookings.filter((booking) => {
+    if (!(booking.end_time < booking_start.toSeconds()) && !(booking.start_time > booking_end.toSeconds())) {
+      return booking;
+    }
+  });
+  return overlapping_bookings.length > 0 ? true : false;
 };

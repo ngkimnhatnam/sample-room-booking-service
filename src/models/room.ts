@@ -16,10 +16,10 @@ interface RoomDataShort {
 }
 
 export interface RoomDataLong extends RoomDataShort {
-  bookings_raw: RoomBookings[];
+  bookings_timestamps: RoomBookings[];
 }
 
-interface RoomBookings {
+export interface RoomBookings {
   booking_id: number;
   start_time: number;
   end_time: number;
@@ -52,7 +52,7 @@ export const findOne = (room_id: number): Promise<RoomDataLong> => {
         eventBus.emit('database-error', err);
         reject(err);
       }
-      res[0].bookings_raw = await findRoomIdAllBookings(room_id);
+      res[0].bookings_timestamps = await findRoomIdAllBookings(room_id);
       resolve(res[0]);
     });
   });
