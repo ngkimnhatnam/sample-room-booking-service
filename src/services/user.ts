@@ -44,6 +44,12 @@ export const handleBooking = async (
   try {
     const room_details = await roomModel.findOne(room_id);
     const { timezone, opening_hour, closing_hour } = room_details;
+    const user_booking_start = DateTimeConversion.DateTime.fromISO(booking_start, { zone: timezone });
+    const user_booking_end = DateTimeConversion.DateTime.fromISO(booking_end, { zone: timezone });
+
+    if (user_booking_end.diff(user_booking_start, 'minutes').minutes < 15) {
+      throw { message: 'Booking must last at least 15 minutes', status: 400 };
+    }
 
     console.log(user_id, opening_hour, closing_hour);
     return {
