@@ -44,10 +44,10 @@ const router = express.Router();
  *               type: string
  *               example: User logged in successfully
  *             status:
- *               type: integer
+ *               type: int
  *               example: 200
  *             user_id:
- *               type: integer
+ *               type: int
  *               example: 10
  *             access_token:
  *               type: string
