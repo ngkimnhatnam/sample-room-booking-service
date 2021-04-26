@@ -15,11 +15,54 @@ interface RoomDataShort {
   created_at: string;
 }
 
+interface RoomDataLong extends RoomDataShort {
+  bookings: RoomBookings[];
+}
+
+interface RoomBookings {
+  booking_id: number;
+  start_time: number;
+  end_time: number;
+}
+
 export const findAll = (): Promise<RoomDataShort[]> => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT * FROM rooms 
       WHERE is_active = ?`;
     const queryValues = [1];
+
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
+};
+
+export const findOne = (room_id: number): Promise<RoomDataLong> => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `SELECT * FROM rooms  
+      WHERE room_id = ? AND is_active = ?`;
+    const queryValues = [room_id, 1];
+
+    SQL.query(sqlQuery, queryValues, async (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      res[0].bookings = await findRoomIdAllBookings(room_id);
+      resolve(res[0]);
+    });
+  });
+};
+
+const findRoomIdAllBookings = (room_id: number) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `SELECT booking_id, start_time, end_time FROM bookings 
+      WHERE room_id = ?`;
+    const queryValues = [room_id];
 
     SQL.query(sqlQuery, queryValues, (err, res) => {
       if (err) {
