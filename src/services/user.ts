@@ -48,13 +48,13 @@ export const handleBooking = async (
     const user_booking_end = DateTime.fromISO(booking_end, { zone: timezone });
     const room_local_time = DateTime.now().setZone(timezone);
 
-    if (!isBookingDurationLongEnough(user_booking_start, user_booking_end)) {
+    if (isBookingDurationTooShort(user_booking_start, user_booking_end)) {
       throw { message: 'Booking must last at least 15 minutes', status: 400 };
     }
     if (isBookingInThePast(user_booking_start, room_local_time)) {
       throw { message: 'Booking must not be in the past', status: 400 };
     }
-    if (!isBookingWithinOpeningHours(user_booking_start, user_booking_end, opening_hour, closing_hour)) {
+    if (isBookingOutsideOpeningHours(user_booking_start, user_booking_end, opening_hour, closing_hour)) {
       throw { message: 'Booking must be within opening hours', status: 400 };
     }
     if (isBookingOverlapped(bookings_timestamps, user_booking_start, user_booking_end)) {
@@ -74,21 +74,15 @@ export const handleBooking = async (
   }
 };
 
-const isBookingDurationLongEnough = (booking_start: DateTime, booking_end: DateTime): boolean => {
-  if (booking_end.diff(booking_start, 'minutes').minutes < 15) {
-    return false;
-  }
-  return true;
+const isBookingDurationTooShort = (booking_start: DateTime, booking_end: DateTime): boolean => {
+  return booking_end.diff(booking_start, 'minutes').minutes < 15 ? true : false;
 };
 
 const isBookingInThePast = (booking_start: DateTime, room_local_time: DateTime): boolean => {
-  if (booking_start.diff(room_local_time, 'minutes').minutes < 0) {
-    return true;
-  }
-  return false;
+  return booking_start.diff(room_local_time, 'minutes').minutes < 0 ? true : false;
 };
 
-const isBookingWithinOpeningHours = (
+const isBookingOutsideOpeningHours = (
   booking_start: DateTime,
   booking_end: DateTime,
   opening_hour: string,
@@ -96,15 +90,12 @@ const isBookingWithinOpeningHours = (
 ): boolean => {
   const [open_in_hour, open_in_minute] = opening_hour.split(':').map((value) => Number(value));
   const [closing_in_hour, closing_in_minute] = closing_hour.split(':').map((value) => Number(value));
-  if (
-    booking_start.hour < open_in_hour ||
+  return booking_start.hour < open_in_hour ||
     (booking_start.hour === open_in_hour && booking_start.minute < open_in_minute) ||
     booking_end.hour > closing_in_hour ||
     (booking_end.hour === closing_in_hour && booking_end.minute > closing_in_minute)
-  ) {
-    return false;
-  }
-  return true;
+    ? true
+    : false;
 };
 
 const isBookingOverlapped = (
