@@ -29,6 +29,8 @@ export const getAllRooms = async () => {
 export const getOneRoom = async (room_id: number) => {
   try {
     const room = (await roomModel.findOne(room_id)) as FinalRoomData;
+
+    /* Room booking schedule is formatted here according to its timezone */
     room.bookings_formatted = room.bookings_raw.map((booking) => {
       const start = DateTimeConversion.DateTime.fromSeconds(booking.start_time, { zone: room.timezone });
       const end = DateTimeConversion.DateTime.fromSeconds(booking.end_time, { zone: room.timezone });
