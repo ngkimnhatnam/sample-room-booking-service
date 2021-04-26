@@ -61,7 +61,7 @@ export const findOne = (room_id: number): Promise<RoomDataLong> => {
 const findRoomIdAllBookings = (room_id: number) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT booking_id, start_time, end_time FROM bookings 
-      WHERE room_id = ?`;
+      WHERE room_id = ? AND end_time > UNIX_TIMESTAMP()`;
     const queryValues = [room_id];
 
     SQL.query(sqlQuery, queryValues, (err, res) => {
