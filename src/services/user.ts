@@ -177,11 +177,25 @@ const isBookingOverlapped = (
 
 export const handleGettingBookings = async (user_id: number) => {
   try {
-    const result = await userModel.findUserBookings(user_id);
+    const booking_timestamps = await userModel.findUserBookings(user_id);
+
+    /* Format the booking timestamp to room's local time */
+    const data = booking_timestamps.map(({ booking_id, room_id, start_time, end_time, timezone }) => {
+      const start = DateTime.fromSeconds(start_time, { zone: timezone }).toFormat('dd-MM-yyyy HH:mm');
+      const end = DateTime.fromSeconds(end_time, { zone: timezone }).toFormat('dd-MM-yyyy HH:mm');
+      return {
+        booking_id,
+        room_id,
+        timezone,
+        start,
+        end,
+      };
+    });
+
     return {
       message: 'User bookings listed successfully',
       status: 200,
-      data: result,
+      data,
     };
   } catch (err) {
     throw { message: 'Something went wrong', status: 500 };

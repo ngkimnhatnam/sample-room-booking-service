@@ -89,9 +89,19 @@ export const deleteUserBooking = (booking_id: number) => {
 
 export const findUserBookings = (
   user_id: number,
-): Promise<{ booking_id: number; room_id: number; start_time: number; end_time: number }[]> => {
+): Promise<
+  {
+    booking_id: number;
+    room_id: number;
+    start_time: number;
+    end_time: number;
+    timezone: string;
+  }[]
+> => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `SELECT booking_id, room_id, start_time, end_time FROM bookings 
+    const sqlQuery = `SELECT bk.booking_id, bk.room_id, bk.start_time, bk.end_time, rm.timezone 
+      FROM bookings as bk 
+      LEFT JOIN rooms as rm ON rm.room_id = bk.room_id 
       WHERE user_id = ?`;
     const queryValues = [user_id];
 
