@@ -62,3 +62,21 @@ describe('Testing POST /rooms endpoint', () => {
     done();
   });
 });
+
+describe('Testing PATCH /rooms/:room_id endpoint', () => {
+  it('Should return success', async (done) => {
+    const app = await loaders({ expressApp: application });
+    const res = await request(app)
+      .patch('/api/v1/rooms/14')
+      .send({
+        room_name: 'Kings Landing',
+        timezone: 'Europe/Moscow',
+        base_price: 3000,
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual('Room updated successfully');
+    done();
+  });
+});
