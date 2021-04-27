@@ -59,15 +59,15 @@ export const getOneRoom = async (room_id: number) => {
   }
 };
 
-export const handleAddingRoom = async (
-  room_name: string,
-  opening_hour: string,
-  closing_hour: string,
-  timezone: string,
-  base_price: number,
-) => {
+export const handleAddingRoom = async (room_data: {
+  room_name: string;
+  opening_hour: string;
+  closing_hour: string;
+  timezone: string;
+  base_price: number;
+}) => {
   try {
-    const new_room_id = await roomModel.addOne(room_name, opening_hour, closing_hour, timezone, base_price);
+    const new_room_id = await roomModel.addOne(room_data);
     return {
       message: 'New room added successfully',
       status: 201,
