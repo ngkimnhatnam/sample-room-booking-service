@@ -128,3 +128,23 @@ describe('Testing User functionality: Create New Booking', () => {
     done();
   });
 });
+
+describe('Testing User functionality: Get Bookings', () => {
+  it('Should return user bookings', async (done) => {
+    const app = await loaders({ expressApp: application });
+    const res = await request(app)
+      .get('/api/v1/users/4/bookings')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual('User bookings listed successfully');
+    expect(res.body.data).toBeDefined();
+    expect(res.body.data).toBeInstanceOf(Array);
+    if (res.body.data.length > 0) {
+      expect(res.body.data[0].booking_id).not.toBeNaN();
+      expect(res.body.data[0].start).toBeDefined();
+      expect(res.body.data[0].timezone).toBeDefined();
+    }
+    done();
+  });
+});
