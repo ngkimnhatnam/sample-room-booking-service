@@ -80,6 +80,7 @@ export const handleBooking = async (
       room_id,
       user_booking_start.toSeconds(),
       user_booking_end.toSeconds(),
+      amount_received,
     );
 
     return {
@@ -209,7 +210,7 @@ export const handleGettingBookings = async (user_id: number) => {
     const booking_timestamps = await userModel.findUserBookings(user_id);
 
     /* Format the booking timestamp to room's local time */
-    const data = booking_timestamps.map(({ booking_id, room_id, start_time, end_time, timezone }) => {
+    const data = booking_timestamps.map(({ booking_id, room_id, start_time, end_time, amount_paid, timezone }) => {
       const start = DateTime.fromSeconds(start_time, { zone: timezone }).toFormat('dd-MM-yyyy HH:mm');
       const end = DateTime.fromSeconds(end_time, { zone: timezone }).toFormat('dd-MM-yyyy HH:mm');
       return {
@@ -218,6 +219,7 @@ export const handleGettingBookings = async (user_id: number) => {
         timezone,
         start,
         end,
+        amount_paid: `${amount_paid / 100}€`,
       };
     });
 
