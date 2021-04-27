@@ -14,7 +14,7 @@ const stripe = new Stripe(paymentConfig.stripe_secret_key, {
 
 export const payRoomBooking = async (
   amount: number,
-  stripe_id = 'cus_JNdIBezxXR2UxH',
+  stripe_id: string,
 ): Promise<Stripe.Response<Stripe.PaymentIntent>> => {
   try {
     return await stripe.paymentIntents.create({

@@ -114,3 +114,18 @@ export const findUserBookings = (
     });
   });
 };
+
+export const findUserStripeId = (user_id: number): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `SELECT stripe_id FROM users 
+      WHERE user_id = ?`;
+    const queryValues = [user_id];
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res[0].stripe_id);
+    });
+  });
+};

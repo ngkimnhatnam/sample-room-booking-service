@@ -64,9 +64,12 @@ export const handleBooking = async (
       throw { message: 'Booking has overlapping reservations', status: 400 };
     }
 
+    /* Retrieve user Stripe ID */
+    const stripe_id = await userModel.findUserStripeId(user_id);
+
     /* Price calculation & payment initiation */
     const final_amount = finalBookingPrice(user_booking_start, user_booking_end, base_price);
-    const { status, amount_received } = await paymentHelper.payRoomBooking(final_amount);
+    const { status, amount_received } = await paymentHelper.payRoomBooking(final_amount, stripe_id);
     if (status !== 'succeeded') {
       throw { message: 'Payment unsuccessful', status: 400 };
     }
