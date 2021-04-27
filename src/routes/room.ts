@@ -297,4 +297,57 @@ router.post('/rooms', roomController.addRoom);
  */
 router.patch('/rooms/:room_id', roomController.updateRoom);
 
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/rooms/{room_id}:
+ *   delete:
+ *     tags:
+ *       - Rooms
+ *     name: Delete an existing room
+ *     summary: Delete an existing room
+ *     description: "This API is used to delete an existing room in the system"
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: room_id
+ *         description: "Room Id to be identified in the system"
+ *         schema:
+ *           type: int
+ *           example: 5
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Success
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Room deleted successfully
+ *             status:
+ *               type: int
+ *               example: 200
+ *       '400':
+ *         description: Bad request
+ *         schema:
+ *           type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: Cannot delete a room which has bookings
+ *       '500':
+ *         description: Internal error
+ *         schema:
+ *           type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: Something went wrong
+ */
+router.delete('/rooms/:room_id', roomController.deleteRoom);
+
 export default router;

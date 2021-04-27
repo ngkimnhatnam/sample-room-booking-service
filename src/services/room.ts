@@ -101,3 +101,22 @@ export const handleUpdatingRoom = async (
     throw { message: 'Something went wrong', status: 500 };
   }
 };
+
+export const handleDeletingRoom = async (room_id: number) => {
+  try {
+    const room = await roomModel.findOne(room_id);
+    if (room.bookings_timestamps.length > 0) {
+      throw { message: 'Cannot delete a room which has bookings', status: 400 };
+    }
+    await roomModel.deleteOne(room_id);
+    return {
+      message: 'Room deleted successfully',
+      status: 200,
+    };
+  } catch (err) {
+    if (err.status) {
+      throw { message: err.message, status: err.status };
+    }
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};

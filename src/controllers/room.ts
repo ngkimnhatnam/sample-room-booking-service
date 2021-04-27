@@ -53,3 +53,14 @@ export const updateRoom = async (req: Request, res: Response): Promise<void> => 
     res.status(err.status).json({ message: err.message });
   }
 };
+
+export const deleteRoom = async (req: Request, res: Response): Promise<void> => {
+  const room_id = Number(req.params.room_id);
+
+  try {
+    const result = await roomService.handleDeletingRoom(room_id);
+    res.status(result.status).json({ ...result });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
+};
