@@ -41,3 +41,15 @@ export const addRoom = async (req: Request, res: Response): Promise<void> => {
     res.status(err.status).json({ message: err.message });
   }
 };
+
+export const updateRoom = async (req: Request, res: Response): Promise<void> => {
+  const room_id = Number(req.params.room_id);
+  const room_data = req.body;
+
+  try {
+    const result = await roomService.handleUpdatingRoom(room_id, room_data);
+    res.status(result.status).json({ ...result });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
+};

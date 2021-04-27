@@ -98,6 +98,44 @@ export const addOne = (room_data: {
   });
 };
 
+export const updateOne = (
+  room_id: number,
+  room_data: {
+    room_name?: string;
+    opening_hour?: string;
+    closing_hour?: string;
+    timezone?: string;
+    base_price?: number;
+  },
+) => {
+  return new Promise((resolve, reject) => {
+    const queryValues: any[] = [];
+    let queryCondition = '';
+
+    // This function maps out the room data into [ [key, value] ] format
+    const mappedRoomData: any[] = Object.entries(room_data);
+
+    // This block loops through mapped object and adds existent values into query string & query value array
+    for (const [key, value] of mappedRoomData) {
+      queryCondition = queryValues.length === 0 ? queryCondition + `${key}= ?` : queryCondition + `, ${key}= ?`;
+      queryValues.push(value);
+    }
+
+    // This adds room id into where condition
+    queryValues.push(room_id);
+    const baseQuery = `UPDATE rooms SET ${queryCondition} WHERE room_id= ?`;
+
+    SQL.query(baseQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      } else {
+        resolve(res.changedRows);
+      }
+    });
+  });
+};
+
 export const deleteOne = (room_id: number) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `DELETE FROM rooms 

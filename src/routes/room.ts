@@ -171,4 +171,6 @@ router.get('/rooms/:room_id', roomController.getRoom);
 
 router.post('/rooms', roomController.addRoom);
 
+router.patch('/rooms/:room_id', roomController.updateRoom);
+
 export default router;

@@ -77,3 +77,27 @@ export const handleAddingRoom = async (room_data: {
     throw { message: 'Something went wrong', status: 500 };
   }
 };
+
+export const handleUpdatingRoom = async (
+  room_id: number,
+  room_data: {
+    room_name?: string;
+    opening_hour?: string;
+    closing_hour?: string;
+    timezone?: string;
+    base_price?: number;
+  },
+) => {
+  try {
+    /* If base price is provided then convert it to number */
+    room_data.base_price && Number(room_data.base_price);
+
+    await roomModel.updateOne(room_id, room_data);
+    return {
+      message: 'Room updated successfully',
+      status: 200,
+    };
+  } catch (err) {
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};
