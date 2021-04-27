@@ -86,3 +86,21 @@ export const deleteUserBooking = (booking_id: number) => {
     });
   });
 };
+
+export const findUserBookings = (
+  user_id: number,
+): Promise<{ booking_id: number; room_id: number; start_time: number; end_time: number }[]> => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `SELECT booking_id, room_id, start_time, end_time FROM bookings 
+      WHERE user_id = ?`;
+    const queryValues = [user_id];
+
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
+};

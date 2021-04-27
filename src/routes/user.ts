@@ -140,4 +140,6 @@ router.post('/users', userController.signup);
  */
 router.post('/users/:user_id/bookings', userController.bookRoom);
 
+router.get('/users/:user_id/bookings', userController.getBookings);
+
 export default router;
