@@ -169,8 +169,132 @@ router.get('/rooms', roomController.getRooms);
  */
 router.get('/rooms/:room_id', roomController.getRoom);
 
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/rooms:
+ *   post:
+ *     tags:
+ *       - Rooms
+ *     name: Add a new room
+ *     summary: Add a new room
+ *     description: "This API is used to add a new room to the system"
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: "Data for new room to be added in the system"
+ *         schema:
+ *           type: object
+ *           properties:
+ *             room_name:
+ *               type: string
+ *               example: Casablanca
+ *             opening_hour:
+ *               type: string
+ *               example: '08:00:00'
+ *             closing_hour:
+ *               type: string
+ *               example: '18:00:00'
+ *             timezone:
+ *               type: string
+ *               example: Africa/Casablanca
+ *             base_price:
+ *               type: number
+ *               example: 4500
+ *     responses:
+ *       '201':
+ *         description: Created
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: New room added successfully
+ *             status:
+ *               type: int
+ *               example: 201
+ *             new_room_id:
+ *               type: int
+ *               example: 25
+ *       '500':
+ *         description: Internal error
+ *         schema:
+ *           type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: Something went wrong
+ */
 router.post('/rooms', roomController.addRoom);
 
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/rooms/{room_id}:
+ *   patch:
+ *     tags:
+ *       - Rooms
+ *     name: Update an existing room
+ *     summary: Update an existing room
+ *     description: "This API is used to update an existing room's details in the system"
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: room_id
+ *         description: "Room Id to be identified in the system"
+ *         schema:
+ *           type: int
+ *           example: 5
+ *         required: true
+ *       - in: body
+ *         name: body
+ *         description: "Data for target room to be updated in the system"
+ *         schema:
+ *           type: object
+ *           properties:
+ *             room_name:
+ *               type: string
+ *               example: Casablanca
+ *             opening_hour:
+ *               type: string
+ *               example: '08:00:00'
+ *             closing_hour:
+ *               type: string
+ *               example: '18:00:00'
+ *             timezone:
+ *               type: string
+ *               example: Africa/Casablanca
+ *             base_price:
+ *               type: number
+ *               example: 4500
+ *     responses:
+ *       '200':
+ *         description: Success
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Room updated successfully
+ *             status:
+ *               type: int
+ *               example: 200
+ *       '500':
+ *         description: Internal error
+ *         schema:
+ *           type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: Something went wrong
+ */
 router.patch('/rooms/:room_id', roomController.updateRoom);
 
 export default router;
