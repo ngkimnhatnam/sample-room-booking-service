@@ -140,6 +140,69 @@ router.post('/users', userController.signup);
  */
 router.post('/users/:user_id/bookings', userController.bookRoom);
 
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/users/{user_id}/bookings:
+ *   get:
+ *     tags:
+ *       - Users
+ *     name: Get bookings
+ *     summary: Get bookings
+ *     description: "This API is used for a user to retrieve his/her upcoming bookings"
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         description: "User Id to be identified in the system"
+ *         schema:
+ *           type: int
+ *           example: 5
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Success
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: User bookings listed successfully
+ *             status:
+ *               type: int
+ *               example: 200
+ *             data:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   booking_id:
+ *                     type: int
+ *                     example: 1
+ *                   room_id:
+ *                     type: int
+ *                     example: 1
+ *                   timezone:
+ *                     type: string
+ *                     example: 'Europe/Helsinki'
+ *                   start:
+ *                     type: string
+ *                     example: '26-04-2021 15:00'
+ *                   end:
+ *                     type: string
+ *                     example: '26-04-2021 17:00'
+ *       '500':
+ *         description: Internal error
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Something went wrong
+ */
 router.get('/users/:user_id/bookings', userController.getBookings);
 
 export default router;
