@@ -68,7 +68,7 @@ export const handleBooking = async (
       user_booking_end.toSeconds(),
     );
     return {
-      messsage: 'Booking created successfully',
+      message: 'Booking created successfully',
       status: 201,
       booking_id,
     };

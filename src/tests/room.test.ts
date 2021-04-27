@@ -32,7 +32,7 @@ describe('Testing GET /rooms/:room_id endpoint', () => {
     expect(res.body.message).toEqual('Room data retrieved successfully');
     expect(res.body.data.room_id).toEqual(1);
     expect(res.body.data.room_name).toEqual('Sauna');
-    expect(res.body.data.bookings_raw).toBeInstanceOf(Array);
+    expect(res.body.data.bookings_timestamps).toBeInstanceOf(Array);
     expect(res.body.data.bookings_formatted).toBeInstanceOf(Array);
     done();
   });
