@@ -4,6 +4,9 @@ import express from 'express';
 // Controllers import
 import * as userController from '../controllers/user';
 
+// Middlewares import
+import { authenticateJWT } from '../middlewares/authentication';
+
 const router = express.Router();
 
 /**
@@ -138,7 +141,7 @@ router.post('/users', userController.signup);
  *               type: string
  *               example: Something went wrong
  */
-router.post('/users/:user_id/bookings', userController.bookRoom);
+router.post('/users/:user_id/bookings', authenticateJWT, userController.bookRoom);
 
 /**
  * @swagger
@@ -203,6 +206,6 @@ router.post('/users/:user_id/bookings', userController.bookRoom);
  *               type: string
  *               example: Something went wrong
  */
-router.get('/users/:user_id/bookings', userController.getBookings);
+router.get('/users/:user_id/bookings', authenticateJWT, userController.getBookings);
 
 export default router;
