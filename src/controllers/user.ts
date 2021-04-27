@@ -14,7 +14,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const bookRoom = async (req: Request, res: Response) => {
+export const bookRoom = async (req: Request, res: Response): Promise<void> => {
   const user_id = Number(req.params.user_id);
   const user_payload = {
     room_id: Number(req.body.room_id),
@@ -24,6 +24,17 @@ export const bookRoom = async (req: Request, res: Response) => {
 
   try {
     const result = await userService.handleBooking(user_id, user_payload);
+    res.status(result.status).json({ ...result });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
+};
+
+export const getBookings = async (req: Request, res: Response): Promise<void> => {
+  const user_id = Number(req.params.user_id);
+
+  try {
+    const result = await userService.handleGettingBookings(user_id);
     res.status(result.status).json({ ...result });
   } catch (err) {
     res.status(err.status).json({ message: err.message });

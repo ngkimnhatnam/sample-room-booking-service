@@ -174,3 +174,16 @@ const isBookingOverlapped = (
     ? true
     : false;
 };
+
+export const handleGettingBookings = async (user_id: number) => {
+  try {
+    const result = await userModel.findUserBookings(user_id);
+    return {
+      message: 'User bookings listed successfully',
+      status: 200,
+      data: result,
+    };
+  } catch (err) {
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};
