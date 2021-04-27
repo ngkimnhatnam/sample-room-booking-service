@@ -18,7 +18,17 @@ event.on('database-error', (err) => {
 event.on('stripe-error', (err) => {
   const info = {
     level: 'error',
-    subject: 'Database error',
+    subject: 'Payment error',
+    message: err,
+  };
+  logger(info);
+});
+
+/* Stripe webhook error */
+event.on('stripe-webhooks-error', (err) => {
+  const info = {
+    level: 'error',
+    subject: 'Webhook error',
     message: err,
   };
   logger(info);

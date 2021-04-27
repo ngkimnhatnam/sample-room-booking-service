@@ -11,6 +11,7 @@ import swaggerDefinition from '../configs/swagger';
 import userRoutes from '../routes/user';
 import authRoutes from '../routes/authentication';
 import roomRoutes from '../routes/room';
+import webhookRoutes from '../routes/webhooks';
 
 const ExpressLoaders = ({ app }: { app: Application }): Application => {
   app.use(express.urlencoded({ extended: true }));
@@ -34,6 +35,7 @@ const ExpressLoaders = ({ app }: { app: Application }): Application => {
   app.use('/api/v1', userRoutes);
   app.use('/api/v1', authRoutes);
   app.use('/api/v1', roomRoutes);
+  app.use('/api/v1', webhookRoutes);
 
   return app;
 };
