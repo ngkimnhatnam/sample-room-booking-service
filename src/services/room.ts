@@ -58,3 +58,65 @@ export const getOneRoom = async (room_id: number) => {
     throw { message: 'Something went wrong', status: 500 };
   }
 };
+
+export const handleAddingRoom = async (room_data: {
+  room_name: string;
+  opening_hour: string;
+  closing_hour: string;
+  timezone: string;
+  base_price: number;
+}) => {
+  try {
+    const new_room_id = await roomModel.addOne(room_data);
+    return {
+      message: 'New room added successfully',
+      status: 201,
+      new_room_id,
+    };
+  } catch (err) {
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};
+
+export const handleUpdatingRoom = async (
+  room_id: number,
+  room_data: {
+    room_name?: string;
+    opening_hour?: string;
+    closing_hour?: string;
+    timezone?: string;
+    base_price?: number;
+  },
+) => {
+  try {
+    /* If base price is provided then convert it to number */
+    room_data.base_price && Number(room_data.base_price);
+
+    await roomModel.updateOne(room_id, room_data);
+    return {
+      message: 'Room updated successfully',
+      status: 200,
+    };
+  } catch (err) {
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};
+
+export const handleDeletingRoom = async (room_id: number) => {
+  try {
+    const room = await roomModel.findOne(room_id);
+    if (room.bookings_timestamps.length > 0) {
+      throw { message: 'Cannot delete a room which has bookings', status: 400 };
+    }
+    await roomModel.deleteOne(room_id);
+    return {
+      message: 'Room deleted successfully',
+      status: 200,
+    };
+  } catch (err) {
+    if (err.status) {
+      throw { message: err.message, status: err.status };
+    }
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};
