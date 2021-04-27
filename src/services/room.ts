@@ -58,3 +58,22 @@ export const getOneRoom = async (room_id: number) => {
     throw { message: 'Something went wrong', status: 500 };
   }
 };
+
+export const handleAddingRoom = async (
+  room_name: string,
+  opening_hour: string,
+  closing_hour: string,
+  timezone: string,
+  base_price: number,
+) => {
+  try {
+    const new_room_id = await roomModel.addOne(room_name, opening_hour, closing_hour, timezone, base_price);
+    return {
+      message: 'New room added successfully',
+      status: 201,
+      new_room_id,
+    };
+  } catch (err) {
+    throw { message: 'Something went wrong', status: 500 };
+  }
+};

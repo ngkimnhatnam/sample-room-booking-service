@@ -23,3 +23,14 @@ export const getRoom = async (req: Request, res: Response): Promise<void> => {
     res.status(err.status).json({ message: err.message });
   }
 };
+
+export const addRoom = async (req: Request, res: Response): Promise<void> => {
+  const { room_name, opening_hour, closing_hour, timezone } = req.body;
+  const base_price = Number(req.body.base_price);
+  try {
+    const result = await roomService.handleAddingRoom(room_name, opening_hour, closing_hour, timezone, base_price);
+    res.status(result.status).json({ ...result });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
+};

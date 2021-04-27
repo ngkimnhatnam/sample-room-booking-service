@@ -73,3 +73,26 @@ const findRoomIdAllBookings = (room_id: number): Promise<RoomBookings[]> => {
     });
   });
 };
+
+export const addOne = (
+  room_name: string,
+  opening_hour: string,
+  closing_hour: string,
+  timezone: string,
+  base_price: number,
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `INSERT INTO rooms 
+      (room_name, opening_hour, closing_hour, timezone, base_price, created_at) 
+      VALUES (?,?,?,?,?, now())`;
+    const queryValues = [room_name, opening_hour, closing_hour, timezone, base_price];
+
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res.insertId);
+    });
+  });
+};
