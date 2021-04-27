@@ -97,3 +97,19 @@ export const addOne = (room_data: {
     });
   });
 };
+
+export const deleteOne = (room_id: number) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `DELETE FROM rooms 
+      WHERE room_id = ?`;
+    const queryValues = [room_id];
+
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
+};
