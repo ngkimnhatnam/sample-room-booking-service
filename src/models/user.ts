@@ -54,3 +54,35 @@ export const createNewBooking = (
     });
   });
 };
+
+export const deleteUserRecord = (user_id: number) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `DELETE FROM users 
+      WHERE user_id = ?`;
+    const queryValues = [user_id];
+
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
+};
+
+export const deleteUserBooking = (booking_id: number) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `DELETE FROM bookings 
+      WHERE booking_id = ?`;
+    const queryValues = [booking_id];
+
+    SQL.query(sqlQuery, queryValues, (err, res) => {
+      if (err) {
+        eventBus.emit('database-error', err);
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
+};
