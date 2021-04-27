@@ -54,7 +54,7 @@ const router = express.Router();
  *                     example: '17:00:00'
  *                   base_price:
  *                     type: int
- *                     example: 1000
+ *                     example: 10
  *                   timezone:
  *                     type: string
  *                     example: Europe/Helsinki
@@ -123,7 +123,7 @@ router.get('/rooms', roomController.getRooms);
  *                   example: '17:00:00'
  *                 base_price:
  *                   type: int
- *                   example: 1000
+ *                   example: 10
  *                 timezone:
  *                   type: string
  *                   example: Europe/Helsinki

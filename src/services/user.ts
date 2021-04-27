@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 
 // Helpers import
 import * as authenticationHelper from '../helpers/authentication';
+import * as paymentHelper from '../helpers/payment';
 
 // Models import
 import * as userModel from '../models/user';
@@ -42,8 +43,10 @@ export const handleBooking = async (
 ) => {
   const { room_id, booking_start, booking_end } = user_payload;
   try {
-    const { timezone, opening_hour, closing_hour, bookings_timestamps } = await roomModel.findOne(room_id);
+    /* Room details fetched */
+    const { timezone, opening_hour, closing_hour, bookings_timestamps, base_price } = await roomModel.findOne(room_id);
 
+    /* Booking time & room local time converted to correct timezone */
     const user_booking_start = DateTime.fromISO(booking_start, { zone: timezone });
     const user_booking_end = DateTime.fromISO(booking_end, { zone: timezone });
     const room_local_time = DateTime.now().setZone(timezone);
@@ -61,16 +64,30 @@ export const handleBooking = async (
       throw { message: 'Booking has overlapping reservations', status: 400 };
     }
 
+    /* Retrieve user Stripe ID */
+    const stripe_id = await userModel.findUserStripeId(user_id);
+
+    /* Price calculation & payment initiation */
+    const final_amount = finalBookingPrice(user_booking_start, user_booking_end, base_price);
+    const { status, amount_received } = await paymentHelper.payRoomBooking(final_amount, stripe_id);
+    if (status !== 'succeeded') {
+      throw { message: 'Payment unsuccessful', status: 400 };
+    }
+
+    /* Insert new booking to DB */
     const booking_id = await userModel.createNewBooking(
       user_id,
       room_id,
       user_booking_start.toSeconds(),
       user_booking_end.toSeconds(),
+      amount_received,
     );
+
     return {
       message: 'Booking created successfully',
       status: 201,
       booking_id,
+      amount_paid: `${amount_received / 100}€`,
     };
   } catch (err) {
     if (err.status) {
@@ -175,12 +192,25 @@ const isBookingOverlapped = (
     : false;
 };
 
+/**
+ * Function returning final calculated price for a booking
+ * @param booking_start - Luxon Datetime object.
+ * Represent user's wanted booking starting time
+ * @param booking_end - Luxon Datetime object.
+ * Represent user's wanted booking ending time
+ * @param base_price - Room base price per hour
+ * @returns integer
+ */
+const finalBookingPrice = (booking_start: DateTime, booking_end: DateTime, base_price: number) => {
+  return Math.round(base_price * booking_end.diff(booking_start, 'hours').hours);
+};
+
 export const handleGettingBookings = async (user_id: number) => {
   try {
     const booking_timestamps = await userModel.findUserBookings(user_id);
 
     /* Format the booking timestamp to room's local time */
-    const data = booking_timestamps.map(({ booking_id, room_id, start_time, end_time, timezone }) => {
+    const data = booking_timestamps.map(({ booking_id, room_id, start_time, end_time, amount_paid, timezone }) => {
       const start = DateTime.fromSeconds(start_time, { zone: timezone }).toFormat('dd-MM-yyyy HH:mm');
       const end = DateTime.fromSeconds(end_time, { zone: timezone }).toFormat('dd-MM-yyyy HH:mm');
       return {
@@ -189,6 +219,7 @@ export const handleGettingBookings = async (user_id: number) => {
         timezone,
         start,
         end,
+        amount_paid: `${amount_paid / 100}€`,
       };
     });
 

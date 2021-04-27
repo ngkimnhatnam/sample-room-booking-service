@@ -15,11 +15,17 @@ interface FinalRoomData extends roomModel.RoomDataLong {
 export const getAllRooms = async () => {
   try {
     const rooms = await roomModel.findAll();
+    const data = rooms.map((room) => {
+      return {
+        ...room,
+        base_price: room.base_price / 100,
+      };
+    });
     return {
       message: 'Rooms data retrieved successfully',
       status: 200,
-      total_records: rooms.length,
-      data: rooms,
+      total_records: data.length,
+      data,
     };
   } catch (err) {
     throw { message: 'Something went wrong', status: 500 };
@@ -29,6 +35,7 @@ export const getAllRooms = async () => {
 export const getOneRoom = async (room_id: number) => {
   try {
     const room = (await roomModel.findOne(room_id)) as FinalRoomData;
+    room.base_price = room.base_price / 100;
 
     /* Room booking schedule is formatted here according to its timezone */
     room.bookings_formatted = room.bookings_timestamps.map((booking) => {

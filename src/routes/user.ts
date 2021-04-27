@@ -124,6 +124,9 @@ router.post('/users', userController.signup);
  *             booking_id:
  *               type: int
  *               example: 10
+ *             amount_paid:
+ *               type: string
+ *               example: '22.73€'
  *       '400':
  *         description: Bad request
  *         schema:
@@ -197,6 +200,9 @@ router.post('/users/:user_id/bookings', authenticateJWT, userController.bookRoom
  *                   end:
  *                     type: string
  *                     example: '26-04-2021 17:00'
+ *                   amount_paid:
+ *                     type: string
+ *                     example: '22.73€'
  *       '500':
  *         description: Internal error
  *         schema:

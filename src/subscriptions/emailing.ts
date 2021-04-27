@@ -1,5 +1,5 @@
 import event from './eventEmitter';
 
-event.on('some-event', () => {
-  console.log('Send email from here');
+event.on('send-confirm-email', () => {
+  console.log('Sending email from favorite service provider');
 });
