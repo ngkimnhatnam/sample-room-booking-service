@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 
 // Helpers import
 import * as authenticationHelper from '../helpers/authentication';
+import * as paymentHelper from '../helpers/payment';
 
 // Models import
 import * as userModel from '../models/user';
@@ -42,7 +43,7 @@ export const handleBooking = async (
 ) => {
   const { room_id, booking_start, booking_end } = user_payload;
   try {
-    const { timezone, opening_hour, closing_hour, bookings_timestamps } = await roomModel.findOne(room_id);
+    const { timezone, opening_hour, closing_hour, bookings_timestamps, base_price } = await roomModel.findOne(room_id);
 
     const user_booking_start = DateTime.fromISO(booking_start, { zone: timezone });
     const user_booking_end = DateTime.fromISO(booking_end, { zone: timezone });
@@ -59,6 +60,11 @@ export const handleBooking = async (
     }
     if (isBookingOverlapped(bookings_timestamps, user_booking_start, user_booking_end)) {
       throw { message: 'Booking has overlapping reservations', status: 400 };
+    }
+
+    const payment_result = await paymentHelper.payRoomBooking(base_price * 10);
+    if (payment_result.status !== 'succeeded') {
+      throw { message: 'pay your booking now', status: 400 };
     }
 
     const booking_id = await userModel.createNewBooking(

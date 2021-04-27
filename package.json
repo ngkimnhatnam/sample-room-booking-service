@@ -57,6 +57,7 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.26.0",
     "mysql": "^2.18.1",
+    "stripe": "^8.145.0",
     "swagger-jsdoc": "^6.0.9",
     "swagger-ui-express": "^4.1.6"
   }
