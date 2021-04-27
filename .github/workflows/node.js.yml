@@ -37,6 +37,8 @@ jobs:
           JWT_TOKEN_SECRET: ${{ secrets.JWT_TOKEN_SECRET }}
           JWT_TOKEN_LIFE: ${{ secrets.JWT_TOKEN_LIFE }}
           JWT_TOKEN_LIFE_SECS: ${{ secrets.JWT_TOKEN_LIFE_SECS }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          API_VERSION: ${{ secrets.API_VERSION }}
       - name: Build and push Docker images
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
