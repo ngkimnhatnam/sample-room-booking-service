@@ -21,6 +21,7 @@ export const payRoomBooking = async (
       amount: amount,
       currency: 'eur',
       customer: stripe_id,
+      confirm: true,
     });
   } catch (err) {
     eventBus.emit('stripe-error', err);

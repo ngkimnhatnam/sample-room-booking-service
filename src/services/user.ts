@@ -43,8 +43,10 @@ export const handleBooking = async (
 ) => {
   const { room_id, booking_start, booking_end } = user_payload;
   try {
+    /* Room details fetched */
     const { timezone, opening_hour, closing_hour, bookings_timestamps, base_price } = await roomModel.findOne(room_id);
 
+    /* Booking time & room local time converted to correct timezone */
     const user_booking_start = DateTime.fromISO(booking_start, { zone: timezone });
     const user_booking_end = DateTime.fromISO(booking_end, { zone: timezone });
     const room_local_time = DateTime.now().setZone(timezone);
@@ -62,21 +64,26 @@ export const handleBooking = async (
       throw { message: 'Booking has overlapping reservations', status: 400 };
     }
 
-    const payment_result = await paymentHelper.payRoomBooking(base_price * 10);
-    if (payment_result.status !== 'succeeded') {
-      throw { message: 'pay your booking now', status: 400 };
+    /* Price calculation & payment initiation */
+    const final_amount = finalBookingPrice(user_booking_start, user_booking_end, base_price);
+    const { status, amount_received } = await paymentHelper.payRoomBooking(final_amount);
+    if (status !== 'succeeded') {
+      throw { message: 'Payment unsuccessful', status: 400 };
     }
 
+    /* Insert new booking to DB */
     const booking_id = await userModel.createNewBooking(
       user_id,
       room_id,
       user_booking_start.toSeconds(),
       user_booking_end.toSeconds(),
     );
+
     return {
       message: 'Booking created successfully',
       status: 201,
       booking_id,
+      amount_paid: `${amount_received / 100}€`,
     };
   } catch (err) {
     if (err.status) {
@@ -179,6 +186,19 @@ const isBookingOverlapped = (
   ).length > 0
     ? true
     : false;
+};
+
+/**
+ * Function returning final calculated price for a booking
+ * @param booking_start - Luxon Datetime object.
+ * Represent user's wanted booking starting time
+ * @param booking_end - Luxon Datetime object.
+ * Represent user's wanted booking ending time
+ * @param base_price - Room base price per hour
+ * @returns integer
+ */
+const finalBookingPrice = (booking_start: DateTime, booking_end: DateTime, base_price: number) => {
+  return Math.round(base_price * booking_end.diff(booking_start, 'hours').hours);
 };
 
 export const handleGettingBookings = async (user_id: number) => {
