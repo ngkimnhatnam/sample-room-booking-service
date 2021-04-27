@@ -102,7 +102,7 @@ export const findUserBookings = (
     const sqlQuery = `SELECT bk.booking_id, bk.room_id, bk.start_time, bk.end_time, rm.timezone 
       FROM bookings as bk 
       LEFT JOIN rooms as rm ON rm.room_id = bk.room_id 
-      WHERE user_id = ?`;
+      WHERE user_id = ? AND bk.end_time > UNIX_TIMESTAMP()`;
     const queryValues = [user_id];
 
     SQL.query(sqlQuery, queryValues, (err, res) => {
