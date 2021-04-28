@@ -143,6 +143,7 @@ To work locally, you may want to add a .env file to the root of the project, wit
 
 ## Trying out with Room Booking API
 
+The server is live at http://3.208.20.48:3000/, and API docs resides at url http://3.208.20.48:3000/api-docs/.
 To simplify the process, the service does not have a running frontend to interact. On top of that, new users created will not be able to book a room since payment will most definitely fail. You can use the following test credentials to try out the API, in which profile has already been configured to have a test card for payment.
 
 ```bash
