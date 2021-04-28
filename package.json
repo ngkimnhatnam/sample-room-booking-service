@@ -8,7 +8,7 @@
     "prestart": "npm run build",
     "start": "node ./dist/server.js",
     "predev": "npm run build",
-    "dev": "nodemon --config nodemon.json src/server.ts",
+    "dev": "nodemon -r dotenv/config src/server.ts",
     "lint": "npx eslint src --fix",
     "test": "jest --detectOpenHandles  --runInBand --forceExit --testPathPattern=dist/"
   },
