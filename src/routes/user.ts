@@ -81,6 +81,8 @@ router.post('/users', userController.signup);
  *     name: Book a room
  *     summary: Book a room
  *     description: "This API is used for a user to book a room"
+ *     security:
+ *       - Bearer: []
  *     consumes:
  *       - application/json
  *     produces:
@@ -156,6 +158,8 @@ router.post('/users/:user_id/bookings', authenticateJWT, userController.bookRoom
  *     name: Get bookings
  *     summary: Get bookings
  *     description: "This API is used for a user to retrieve his/her upcoming bookings"
+ *     security:
+ *       - Bearer: []
  *     consumes:
  *       - application/json
  *     produces:

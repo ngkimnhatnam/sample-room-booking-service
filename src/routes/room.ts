@@ -65,10 +65,10 @@ const router = express.Router();
  *         description: Internal error
  *         schema:
  *           type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: Something went wrong
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Something went wrong
  */
 router.get('/rooms', roomController.getRooms);
 
@@ -162,10 +162,10 @@ router.get('/rooms', roomController.getRooms);
  *         description: Internal error
  *         schema:
  *           type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: Something went wrong
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Something went wrong
  */
 router.get('/rooms/:room_id', roomController.getRoom);
 
@@ -224,10 +224,10 @@ router.get('/rooms/:room_id', roomController.getRoom);
  *         description: Internal error
  *         schema:
  *           type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: Something went wrong
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Something went wrong
  */
 router.post('/rooms', roomController.addRoom);
 
@@ -290,10 +290,10 @@ router.post('/rooms', roomController.addRoom);
  *         description: Internal error
  *         schema:
  *           type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: Something went wrong
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Something went wrong
  */
 router.patch('/rooms/:room_id', roomController.updateRoom);
 
@@ -335,18 +335,18 @@ router.patch('/rooms/:room_id', roomController.updateRoom);
  *         description: Bad request
  *         schema:
  *           type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: Cannot delete a room which has bookings
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Cannot delete a room which has bookings
  *       '500':
  *         description: Internal error
  *         schema:
  *           type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: Something went wrong
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: Something went wrong
  */
 router.delete('/rooms/:room_id', roomController.deleteRoom);
 
