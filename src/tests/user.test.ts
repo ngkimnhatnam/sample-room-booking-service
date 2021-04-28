@@ -106,8 +106,8 @@ describe('Testing User functionality: Create New Booking Error Cases', () => {
       .post(`/api/v1/users/${login.body.user_id}/bookings`)
       .send({
         room_id: 1,
-        booking_start: '2021-04-28T11:00:00',
-        booking_end: '2021-04-28T19:00:00',
+        booking_start: '2022-04-28T11:00:00',
+        booking_end: '2022-04-28T19:00:00',
       })
       .set({ Authorization: `Bearer ${login.body.access_token}`, Accept: 'application/json' })
       .expect('Content-Type', /json/);
