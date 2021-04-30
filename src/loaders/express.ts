@@ -16,6 +16,16 @@ import webhookRoutes from '../routes/webhooks';
 const ExpressLoaders = ({ app }: { app: Application }): Application => {
   app.use(express.urlencoded({ extended: true }));
 
+  app.use(
+    express.json({
+      //@ts-ignore
+      verify: (req: Request, res: Response, buffer: any) => {
+        // @ts-ignore
+        return (req['rawBody'] = buffer);
+      },
+    }),
+  );
+
   //@ts-ignore
   app.use((req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Origin', '*');
