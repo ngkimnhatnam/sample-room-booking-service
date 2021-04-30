@@ -6,6 +6,24 @@
 
 The Room Service backend API is an example implementation of a simple room booking system, in which users can browse and pay for bookings to available rooms. Admin endpoints are also available so that new rooms can be added, updated, deleted per need.
 
+## Trying out with Room Booking API
+
+The server is live at http://3.208.20.48:3000/, and API docs resides at url http://3.208.20.48:3000/api-docs/.
+To simplify the process, the service does not have a running frontend to interact. On top of that, new users created will not be able to book a room since payment will most definitely fail. You can use the following test credentials to try out the API, in which profile has already been configured to have a test card for payment.
+
+```bash
+ - username: random@mail.com
+ - password: randomPass
+```
+
+After logging in, you will need to use the access token in response body for subsequent request authorization headers as Bearer ${token} to access specific private routes if using Postman.
+
+## Project development documentation
+
+- [Application functionalities](docs/functionality.md)
+- [Database schema design](docs/database_design.md)
+- [Third party libraries usage](docs/third_party_usage.md)
+
 ## Tech stacks used
 
 - NodeJs / Typescript
@@ -135,20 +153,4 @@ All other secrets defined in test phase of the workflow should also be provided,
 
 To work locally, you may want to add a .env file to the root of the project, with all environment variables provided as stated in node.js.yml file before running the application in dev mode.
 
-## Project development documentation
 
-- [Application functionalities](docs/functionality.md)
-- [Database schema design](docs/database_design.md)
-- [Third party libraries usage](docs/third_party_usage.md)
-
-## Trying out with Room Booking API
-
-The server is live at http://3.208.20.48:3000/, and API docs resides at url http://3.208.20.48:3000/api-docs/.
-To simplify the process, the service does not have a running frontend to interact. On top of that, new users created will not be able to book a room since payment will most definitely fail. You can use the following test credentials to try out the API, in which profile has already been configured to have a test card for payment.
-
-```bash
- - username: random@mail.com
- - password: randomPass
-```
-
-After logging in, you will need to use the access token in response body for subsequent request authorization headers as Bearer ${token} to access specific private routes.
